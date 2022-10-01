@@ -1,8 +1,38 @@
-# The test.py reads a folder named ‘testPatient’ and outputs two folders. One folder named “Slices” and another folder named ‘’Boundaries’.
-# ‘Slices’ folder will further have ‘N’ number of folders where N is number of images that ends with “thresh”.
-# for example, in the given data we have N=112 (‘testPatient’ will have different ‘N’). Every image folder should contain the brain slices images of that IC_thresh image.
-# Similarly, another folder “Boundaries” will also have N number of folders and every folder will have boundary highlighted images of that IC_thresh image.
+import cv2
+import glob
+import os
+from PIL import Image
+import numpy as np
+from imutils.object_detection import non_max_suppression
 
+thresh = 0.99
+thresh_images = []
+filecount = 0
 
+try:
+    parent_dir = r"C:\Users\abawane\PycharmProjects\BrainBoundaryExtraction"
+    Data_path = r"C:\Users\abawane\PycharmProjects\BrainBoundaryExtraction\Data"
+except:
+    pass
 
+folder_boundaries = "Boundaries"
+folder_slices = "Slices"
+try:
+    os.mkdir(os.path.join(parent_dir, folder_boundaries))
+    os.mkdir(os.path.join(parent_dir, folder_slices))
+except:
+    pass
+
+for file_name in os.listdir(Data_path):
+    if file_name.endswith('thresh.png'):
+        folder_name = file_name[:-4]
+        try:
+            os.mkdir(os.path.join(parent_dir+r"\Boundaries", folder_name))
+            os.mkdir(os.path.join(parent_dir+r"\Slices", folder_name))
+        except:
+            pass
+
+        img = cv2.imread(os.path.join(Data_path, file_name))
+        if img is not None:
+            thresh_images.append(img)
 
